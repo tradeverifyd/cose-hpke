@@ -10,8 +10,8 @@ const VERSION_DEFLATE_RAW = 0x01;
  * Encode bytes to base64url (no padding).
  */
 export function toBase64Url(bytes: Uint8Array): string {
-  const binary = String.fromCharCode(...bytes);
-  const base64 = btoa(binary);
+  // Use Buffer for large arrays to avoid stack overflow with spread operator
+  const base64 = Buffer.from(bytes).toString('base64');
   // Convert to base64url: replace + with -, / with _, remove padding
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
@@ -25,12 +25,8 @@ export function fromBase64Url(str: string): Uint8Array {
   // Add padding if needed
   const padLen = (4 - (base64.length % 4)) % 4;
   base64 += '='.repeat(padLen);
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
+  // Use Buffer for consistent handling
+  return new Uint8Array(Buffer.from(base64, 'base64'));
 }
 
 /**

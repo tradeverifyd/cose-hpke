@@ -19,14 +19,14 @@ export async function compress(data: Uint8Array): Promise<Uint8Array> {
  * Throws if data is corrupted or not valid deflate-raw.
  */
 export async function decompress(data: Uint8Array): Promise<Uint8Array> {
+  const ds = new DecompressionStream('deflate-raw');
+  const writer = ds.writable.getWriter();
+  // Cast required for Bun's TypeScript (BufferSource type issue)
+  writer.write(data as BufferSource);
+  writer.close();
   try {
-    const ds = new DecompressionStream('deflate-raw');
-    const writer = ds.writable.getWriter();
-    // Cast required for Bun's TypeScript (BufferSource type issue)
-    writer.write(data as BufferSource);
-    writer.close();
     return new Uint8Array(await new Response(ds.readable).arrayBuffer());
-  } catch (error) {
+  } catch {
     throw new Error('Failed to decompress data: invalid or corrupted');
   }
 }
