@@ -12,7 +12,7 @@ This roadmap delivers a TypeScript/Bun implementation of COSE-HPKE (draft-ietf-c
 
 - [x] **Phase 1: Foundation** - Core library with COSE structures and HPKE-7 encryption
 - [x] **Phase 2: CLI** - Command-line interface for keygen, encrypt, and decrypt
-- [ ] **Phase 3: URL Transport** - Compression and URL fragment encoding/decoding
+- [x] **Phase 3: URL Transport** - Compression and URL fragment encoding/decoding
 - [ ] **Phase 4: Web Demo** - Browser-based encryption with key storage and GitHub Pages hosting
 
 ## Phase Details
@@ -60,7 +60,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md - Compression library module, CLI integration, and URL transport tests
+- [x] 03-01-PLAN.md - Compression library module, CLI integration, and URL transport tests
 
 ### Phase 4: Web Demo
 **Goal**: Users can encrypt and decrypt messages entirely in the browser via a GitHub Pages demo
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-19 |
 | 2. CLI | 2/2 | Complete | 2026-01-19 |
-| 3. URL Transport | 0/1 | Planned | - |
+| 3. URL Transport | 1/1 | ✓ Complete | 2026-01-19 |
 | 4. Web Demo | 0/3 | Not started | - |
 
 ---

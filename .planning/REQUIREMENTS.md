@@ -40,10 +40,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### URL Transport
 
-- [ ] **URL-01**: Encrypted COSE message is compressed via CompressionStream
-- [ ] **URL-02**: Compressed data is encoded as base64url
-- [ ] **URL-03**: Encoded data is placed in URL fragment (never sent to server)
-- [ ] **URL-04**: Decryption reverses: fragment -> base64url decode -> decompress -> decrypt
+- [x] **URL-01**: Encrypted COSE message is compressed via CompressionStream
+- [x] **URL-02**: Compressed data is encoded as base64url
+- [x] **URL-03**: Encoded data is placed in URL fragment (never sent to server)
+- [x] **URL-04**: Decryption reverses: fragment -> base64url decode -> decompress -> decrypt
 
 ## v2 Requirements
 
@@ -100,10 +100,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WEB-06 | Phase 4 | Pending |
 | WEB-07 | Phase 4 | Pending |
 | WEB-08 | Phase 4 | Pending |
-| URL-01 | Phase 3 | Pending |
-| URL-02 | Phase 3 | Pending |
-| URL-03 | Phase 3 | Pending |
-| URL-04 | Phase 3 | Pending |
+| URL-01 | Phase 3 | Complete |
+| URL-02 | Phase 3 | Complete |
+| URL-03 | Phase 3 | Complete |
+| URL-04 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 26 total
