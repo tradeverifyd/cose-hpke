@@ -120,3 +120,129 @@ export function decodeCoseKey(bytes: Uint8Array): CoseKeyMap {
 export function toDiagnostic(coseKeyBytes: Uint8Array): string {
   return toDiagnosticNotation(coseKeyBytes);
 }
+
+/**
+ * Convert a COSE_Key map to a WebCrypto CryptoKey.
+ */
+export async function coseKeyToCryptoKey(
+  coseKey: CoseKeyMap,
+  type: 'public' | 'private'
+): Promise<CryptoKey> {
+  const kty = coseKey.get(COSE_KEY_KTY);
+  if (kty !== KTY_EC2) {
+    throw new InvalidKeyError(`Unsupported key type: ${kty}`, 'EC2');
+  }
+
+  const x = coseKey.get(COSE_KEY_X) as Uint8Array;
+  const y = coseKey.get(COSE_KEY_Y) as Uint8Array;
+  const d = coseKey.get(COSE_KEY_D) as Uint8Array | undefined;
+
+  // Build JWK
+  const jwk: JsonWebKey = {
+    kty: 'EC',
+    crv: 'P-256',
+    x: base64UrlEncode(x),
+    y: base64UrlEncode(y),
+  };
+
+  if (type === 'private') {
+    if (!d) {
+      throw new InvalidKeyError('Private key requires d parameter', 'EC2');
+    }
+    jwk.d = base64UrlEncode(d);
+  }
+
+  // Import as CryptoKey - ECDH keys for HPKE
+  const keyUsages: KeyUsage[] = type === 'private'
+    ? ['deriveBits', 'deriveKey']
+    : [];
+
+  return crypto.subtle.importKey(
+    'jwk',
+    jwk,
+    { name: 'ECDH', namedCurve: 'P-256' },
+    true,
+    keyUsages
+  );
+}
+
+/**
+ * Convert a JWK to CBOR-encoded COSE_Key.
+ */
+export async function fromJwk(jwk: JsonWebKey): Promise<Uint8Array> {
+  if (jwk.kty !== 'EC' || jwk.crv !== 'P-256') {
+    throw new InvalidKeyError('Only P-256 EC keys supported', jwk.kty ?? 'unknown');
+  }
+
+  if (!jwk.x || !jwk.y) {
+    throw new InvalidKeyError('JWK missing x or y coordinate', 'EC');
+  }
+
+  const map = new Map<number, number | Uint8Array>();
+  map.set(COSE_KEY_KTY, KTY_EC2);
+  map.set(COSE_KEY_CRV, CRV_P256);
+  map.set(COSE_KEY_X, base64UrlDecode(jwk.x));
+  map.set(COSE_KEY_Y, base64UrlDecode(jwk.y));
+
+  if (jwk.d) {
+    map.set(COSE_KEY_D, base64UrlDecode(jwk.d));
+  }
+
+  return encode(map);
+}
+
+/**
+ * Convert CBOR-encoded COSE_Key to JWK.
+ */
+export async function toJwk(coseKeyBytes: Uint8Array): Promise<JsonWebKey> {
+  const coseKey = decodeCoseKey(coseKeyBytes);
+
+  const kty = coseKey.get(COSE_KEY_KTY);
+  if (kty !== KTY_EC2) {
+    throw new InvalidKeyError(`Unsupported key type for JWK: ${kty}`, 'EC2');
+  }
+
+  const x = coseKey.get(COSE_KEY_X) as Uint8Array;
+  const y = coseKey.get(COSE_KEY_Y) as Uint8Array;
+  const d = coseKey.get(COSE_KEY_D) as Uint8Array | undefined;
+
+  const jwk: JsonWebKey = {
+    kty: 'EC',
+    crv: 'P-256',
+    x: base64UrlEncode(x),
+    y: base64UrlEncode(y),
+  };
+
+  if (d) {
+    jwk.d = base64UrlEncode(d);
+  }
+
+  return jwk;
+}
+
+/**
+ * Encode bytes to base64url string.
+ */
+function base64UrlEncode(bytes: Uint8Array): string {
+  const binary = String.fromCharCode(...bytes);
+  const base64 = btoa(binary);
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+/**
+ * Decode base64url string to bytes.
+ */
+function base64UrlDecode(str: string): Uint8Array {
+  // Restore standard base64
+  let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  // Add padding if needed
+  while (base64.length % 4 !== 0) {
+    base64 += '=';
+  }
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
