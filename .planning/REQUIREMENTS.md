@@ -29,14 +29,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Web Demo
 
-- [ ] **WEB-01**: User can generate keypair in browser
-- [ ] **WEB-02**: User can encrypt message by selecting recipient and entering plaintext
-- [ ] **WEB-03**: User can decrypt message from URL fragment
-- [ ] **WEB-04**: User can save public keys with names in localStorage
-- [ ] **WEB-05**: User can save private keys with names in localStorage
-- [ ] **WEB-06**: User can select saved keys for encryption/decryption
-- [ ] **WEB-07**: Messages are compressed before encoding to URL
-- [ ] **WEB-08**: Demo hosted on GitHub Pages
+- [x] **WEB-01**: User can generate keypair in browser
+- [x] **WEB-02**: User can encrypt message by selecting recipient and entering plaintext
+- [x] **WEB-03**: User can decrypt message from URL fragment
+- [x] **WEB-04**: User can save public keys with names in localStorage
+- [x] **WEB-05**: User can save private keys with names in localStorage
+- [x] **WEB-06**: User can select saved keys for encryption/decryption
+- [x] **WEB-07**: Messages are compressed before encoding to URL
+- [x] **WEB-08**: Demo hosted on GitHub Pages
 
 ### URL Transport
 
@@ -92,14 +92,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLI-05 | Phase 2 | Complete |
 | CLI-06 | Phase 2 | Complete |
 | CLI-07 | Phase 2 | Complete |
-| WEB-01 | Phase 4 | Pending |
-| WEB-02 | Phase 4 | Pending |
-| WEB-03 | Phase 4 | Pending |
-| WEB-04 | Phase 4 | Pending |
-| WEB-05 | Phase 4 | Pending |
-| WEB-06 | Phase 4 | Pending |
-| WEB-07 | Phase 4 | Pending |
-| WEB-08 | Phase 4 | Pending |
+| WEB-01 | Phase 4 | Complete |
+| WEB-02 | Phase 4 | Complete |
+| WEB-03 | Phase 4 | Complete |
+| WEB-04 | Phase 4 | Complete |
+| WEB-05 | Phase 4 | Complete |
+| WEB-06 | Phase 4 | Complete |
+| WEB-07 | Phase 4 | Complete |
+| WEB-08 | Phase 4 | Complete |
 | URL-01 | Phase 3 | Complete |
 | URL-02 | Phase 3 | Complete |
 | URL-03 | Phase 3 | Complete |
