@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-19)
 
 **Core value:** Enable end-to-end encrypted message sharing through shareable URLs where the encrypted content travels in the fragment and decryption happens entirely client-side.
-**Current focus:** Phase 3 - URL Transport (Plan 1 complete)
+**Current focus:** Phase 4 - Web Demo (Plan 1 complete)
 
 ## Current Position
 
-Phase: 3 of 4 (URL Transport)
+Phase: 4 of 4 (Web Demo)
 Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-01-19 - Completed 03-01-PLAN.md
+Last activity: 2026-01-19 - Completed 04-01-PLAN.md
 
-Progress: [██████░░░░] 62.5%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 4min 37sec
-- Total execution time: 0.38 hours
+- Total plans completed: 6
+- Average duration: 4min 14sec
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [██████░░░░] 62.5%
 | 01-foundation | 2 | 8min 34sec | 4min 17sec |
 | 02-cli | 2 | 8min 35sec | 4min 18sec |
 | 03-url-transport | 1 | 6min | 6min |
+| 04-web-demo | 1 | 2min 17sec | 2min 17sec |
 
 **Recent Trend:**
-- Last 5 plans: 5min 34sec, 5min 44sec, 2min 51sec, 6min
+- Last 5 plans: 5min 44sec, 2min 51sec, 6min, 2min 17sec
 - Trend: stable, efficient execution
 
 *Updated after each plan completion*
@@ -60,6 +61,9 @@ Recent decisions affecting current work:
 - [03-01]: Version prefix byte (0x00=uncompressed, 0x01=deflate-raw) for format detection
 - [03-01]: Buffer.from for base64url encoding to handle large arrays
 - [03-01]: Response.arrayBuffer() pattern for stream consumption (Safari compatible)
+- [04-01]: btoa/atob for browser base64 encoding (avoiding Node.js Buffer polyfill)
+- [04-01]: Separate browser.ts entry point for bundling with browser-specific implementations
+- [04-01]: localStorage key storage with hex-encoded CBOR and JSON array format
 
 ### Pending Todos
 
@@ -72,6 +76,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-19T18:58:50Z
-Stopped at: Completed 03-01-PLAN.md (URL transport compression)
+Last session: 2026-01-19T19:59:36Z
+Stopped at: Completed 04-01-PLAN.md (browser bundle and key storage)
 Resume file: None
