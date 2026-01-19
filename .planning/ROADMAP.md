@@ -27,11 +27,11 @@ This roadmap delivers a TypeScript/Bun implementation of COSE-HPKE (draft-ietf-c
   3. User can encrypt a message to multiple recipients using key encryption (COSE_Encrypt)
   4. User can decrypt messages from both encryption modes using their private key
   5. User can view any key in CDDL diagnostic notation
-**Plans**: TBD (1-3 plans)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Project setup with types, CBOR encoding, and COSE_Key structures
-- [ ] 01-02: HPKE-7 integration with integrated and key encryption modes
+- [ ] 01-01-PLAN.md - Project setup with types, CBOR encoding, and COSE_Key structures
+- [ ] 01-02-PLAN.md - HPKE-7 integration with integrated and key encryption modes
 
 ### Phase 2: CLI
 **Goal**: Users can perform all cryptographic operations from the command line
@@ -85,11 +85,12 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Not started | - |
+| 1. Foundation | 0/2 | Planned | - |
 | 2. CLI | 0/1 | Not started | - |
 | 3. URL Transport | 0/1 | Not started | - |
 | 4. Web Demo | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-19*
+*Phase 1 planned: 2026-01-19*
 *Depth: quick (4 phases)*
