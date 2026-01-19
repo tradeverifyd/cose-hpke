@@ -244,7 +244,9 @@ async function handleEncrypt() {
 
     const plaintextBytes = new TextEncoder().encode(plaintext);
     const ciphertext = await lib.encrypt(plaintextBytes, [recipientKey]);
-    const url = await lib.createShareableUrl(ciphertext);
+    // Use current page as base URL for local testing
+    const baseUrl = window.location.origin + window.location.pathname;
+    const url = await lib.createShareableUrl(ciphertext, baseUrl);
 
     // Display result
     document.getElementById('shareable-url').value = url;
@@ -264,7 +266,12 @@ async function generateQrCode(url) {
     const { generate } = await import('https://esm.sh/lean-qr@2');
     const canvas = document.getElementById('qr-canvas');
     const qr = generate(url);
-    qr.toCanvas(canvas);
+
+    // Draw QR code with white background and black foreground for proper contrast
+    qr.toCanvas(canvas, {
+      on: [0, 0, 0, 255],       // Black modules (RGBA)
+      off: [255, 255, 255, 255] // White background (RGBA)
+    });
   } catch (err) {
     console.error('QR generation failed:', err);
     // Fallback: hide QR canvas
