@@ -3,6 +3,7 @@
 
 import { defineCommand, runMain } from 'citty';
 import keygen from './commands/keygen.ts';
+import encrypt from './commands/encrypt.ts';
 
 const main = defineCommand({
   meta: {
@@ -12,6 +13,7 @@ const main = defineCommand({
   },
   subCommands: {
     keygen,
+    encrypt,
   },
 });
 
