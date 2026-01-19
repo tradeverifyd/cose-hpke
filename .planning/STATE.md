@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-19)
 
 **Core value:** Enable end-to-end encrypted message sharing through shareable URLs where the encrypted content travels in the fragment and decryption happens entirely client-side.
-**Current focus:** Phase 4 - Web Demo (Plan 1 complete)
+**Current focus:** Phase 4 - Web Demo (Plan 2 complete)
 
 ## Current Position
 
 Phase: 4 of 4 (Web Demo)
-Plan: 1 of 2 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-19 - Completed 04-01-PLAN.md
+Last activity: 2026-01-19 - Completed 04-02-PLAN.md
 
-Progress: [███████░░░] 75%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 4min 14sec
-- Total execution time: 0.42 hours
+- Total plans completed: 7
+- Average duration: ~5min
+- Total execution time: ~0.58 hours
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [███████░░░] 75%
 | 01-foundation | 2 | 8min 34sec | 4min 17sec |
 | 02-cli | 2 | 8min 35sec | 4min 18sec |
 | 03-url-transport | 1 | 6min | 6min |
-| 04-web-demo | 1 | 2min 17sec | 2min 17sec |
+| 04-web-demo | 2 | 12min 17sec | 6min 9sec |
 
 **Recent Trend:**
-- Last 5 plans: 5min 44sec, 2min 51sec, 6min, 2min 17sec
-- Trend: stable, efficient execution
+- Last 5 plans: 2min 51sec, 6min, 2min 17sec, ~10min
+- Trend: stable execution with checkpoint interaction
 
 *Updated after each plan completion*
 
@@ -64,6 +64,8 @@ Recent decisions affecting current work:
 - [04-01]: btoa/atob for browser base64 encoding (avoiding Node.js Buffer polyfill)
 - [04-01]: Separate browser.ts entry point for bundling with browser-specific implementations
 - [04-01]: localStorage key storage with hex-encoded CBOR and JSON array format
+- [04-02]: Local testing URL uses window.location.origin + pathname (not hardcoded placeholder)
+- [04-02]: QR code explicit RGBA colors (black on white) for scanner compatibility
 
 ### Pending Todos
 
@@ -76,6 +78,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-19T19:59:36Z
-Stopped at: Completed 04-01-PLAN.md (browser bundle and key storage)
+Last session: 2026-01-19T20:10:00Z
+Stopped at: Completed 04-02-PLAN.md (complete web UI)
 Resume file: None
