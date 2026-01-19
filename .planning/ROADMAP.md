@@ -72,12 +72,12 @@ Plans:
   3. User can select a saved recipient key, enter plaintext, and generate a shareable URL
   4. User can open a URL with encrypted fragment and see decrypted message (using key from localStorage)
   5. Demo is accessible via GitHub Pages URL
-**Plans**: TBD (1-3 plans)
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Browser bundle and key management UI
-- [ ] 04-02: Encrypt/decrypt pages with URL fragment handling
-- [ ] 04-03: GitHub Pages deployment
+- [ ] 04-01-PLAN.md - Browser bundle and localStorage key management module
+- [ ] 04-02-PLAN.md - Complete web UI with encryption and decryption flows
+- [ ] 04-03-PLAN.md - GitHub Pages deployment workflow
 
 ## Progress
 
@@ -88,12 +88,13 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-19 |
 | 2. CLI | 2/2 | Complete | 2026-01-19 |
-| 3. URL Transport | 1/1 | ✓ Complete | 2026-01-19 |
-| 4. Web Demo | 0/3 | Not started | - |
+| 3. URL Transport | 1/1 | Complete | 2026-01-19 |
+| 4. Web Demo | 0/3 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-19*
 *Phase 1 planned: 2026-01-19*
 *Phase 2 planned: 2026-01-19*
 *Phase 3 planned: 2026-01-19*
+*Phase 4 planned: 2026-01-19*
 *Depth: quick (4 phases)*
