@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "build:demo": "bun run scripts/build-demo.ts",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "cli": "bun run src/cli/index.ts"
