@@ -9,13 +9,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Core Library
 
-- [ ] **CORE-01**: Library implements HPKE-7 cipher suite (P-256 + HKDF-SHA256 + AES-256-GCM)
-- [ ] **CORE-02**: Library supports integrated encryption mode (COSE_Encrypt0, single recipient)
-- [ ] **CORE-03**: Library supports key encryption mode (COSE_Encrypt, multiple recipients)
-- [ ] **CORE-04**: Library generates COSE_Key keypairs for P-256
-- [ ] **CORE-05**: Library parses and serializes COSE_Key format
-- [ ] **CORE-06**: Library uses deterministic CBOR encoding
-- [ ] **CORE-07**: Library displays keys in CDDL diagnostic notation
+- [x] **CORE-01**: Library implements HPKE-7 cipher suite (P-256 + HKDF-SHA256 + AES-256-GCM)
+- [x] **CORE-02**: Library supports integrated encryption mode (COSE_Encrypt0, single recipient)
+- [x] **CORE-03**: Library supports key encryption mode (COSE_Encrypt, multiple recipients)
+- [x] **CORE-04**: Library generates COSE_Key keypairs for P-256
+- [x] **CORE-05**: Library parses and serializes COSE_Key format
+- [x] **CORE-06**: Library uses deterministic CBOR encoding
+- [x] **CORE-07**: Library displays keys in CDDL diagnostic notation
 
 ### CLI
 
@@ -78,13 +78,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | Phase 1 | Pending |
-| CORE-02 | Phase 1 | Pending |
-| CORE-03 | Phase 1 | Pending |
-| CORE-04 | Phase 1 | Pending |
-| CORE-05 | Phase 1 | Pending |
-| CORE-06 | Phase 1 | Pending |
-| CORE-07 | Phase 1 | Pending |
+| CORE-01 | Phase 1 | Complete |
+| CORE-02 | Phase 1 | Complete |
+| CORE-03 | Phase 1 | Complete |
+| CORE-04 | Phase 1 | Complete |
+| CORE-05 | Phase 1 | Complete |
+| CORE-06 | Phase 1 | Complete |
+| CORE-07 | Phase 1 | Complete |
 | CLI-01 | Phase 2 | Pending |
 | CLI-02 | Phase 2 | Pending |
 | CLI-03 | Phase 2 | Pending |
