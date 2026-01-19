@@ -2,6 +2,7 @@
   "name": "cose-hpke",
   "version": "0.1.0",
   "description": "COSE-HPKE implementation for hybrid public key encryption with CBOR serialization",
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
