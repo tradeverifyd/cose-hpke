@@ -42,10 +42,11 @@ Plans:
   2. User can run `encrypt` command and receive a shareable URL containing the encrypted message
   3. User can run `encrypt --output file.cose` and save encrypted message to a file
   4. User can run `decrypt` command with either a URL or file path and see decrypted plaintext
-**Plans**: TBD (1-2 plans)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: CLI commands with citty framework
+- [ ] 02-01-PLAN.md - CLI setup with citty framework and keygen command
+- [ ] 02-02-PLAN.md - Encrypt and decrypt commands with URL/file I/O
 
 ### Phase 3: URL Transport
 **Goal**: Encrypted messages can be efficiently transported in URL fragments
@@ -85,12 +86,13 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/2 | ✓ Complete | 2026-01-19 |
-| 2. CLI | 0/1 | Not started | - |
+| 1. Foundation | 2/2 | Complete | 2026-01-19 |
+| 2. CLI | 0/2 | Planned | - |
 | 3. URL Transport | 0/1 | Not started | - |
 | 4. Web Demo | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-19*
 *Phase 1 planned: 2026-01-19*
+*Phase 2 planned: 2026-01-19*
 *Depth: quick (4 phases)*
