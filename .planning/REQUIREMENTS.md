@@ -19,13 +19,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### CLI
 
-- [ ] **CLI-01**: User can generate keypair via `keygen` command
-- [ ] **CLI-02**: User can encrypt message via `encrypt` command
-- [ ] **CLI-03**: User can decrypt message via `decrypt` command
-- [ ] **CLI-04**: Encrypt outputs shareable URL by default
-- [ ] **CLI-05**: Encrypt can output to file with `--output` flag
-- [ ] **CLI-06**: Decrypt accepts URL or file path as input
-- [ ] **CLI-07**: CLI displays keys in CDDL diagnostic notation
+- [x] **CLI-01**: User can generate keypair via `keygen` command
+- [x] **CLI-02**: User can encrypt message via `encrypt` command
+- [x] **CLI-03**: User can decrypt message via `decrypt` command
+- [x] **CLI-04**: Encrypt outputs shareable URL by default
+- [x] **CLI-05**: Encrypt can output to file with `--output` flag
+- [x] **CLI-06**: Decrypt accepts URL or file path as input
+- [x] **CLI-07**: CLI displays keys in CDDL diagnostic notation
 
 ### Web Demo
 
@@ -85,13 +85,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-05 | Phase 1 | Complete |
 | CORE-06 | Phase 1 | Complete |
 | CORE-07 | Phase 1 | Complete |
-| CLI-01 | Phase 2 | Pending |
-| CLI-02 | Phase 2 | Pending |
-| CLI-03 | Phase 2 | Pending |
-| CLI-04 | Phase 2 | Pending |
-| CLI-05 | Phase 2 | Pending |
-| CLI-06 | Phase 2 | Pending |
-| CLI-07 | Phase 2 | Pending |
+| CLI-01 | Phase 2 | Complete |
+| CLI-02 | Phase 2 | Complete |
+| CLI-03 | Phase 2 | Complete |
+| CLI-04 | Phase 2 | Complete |
+| CLI-05 | Phase 2 | Complete |
+| CLI-06 | Phase 2 | Complete |
+| CLI-07 | Phase 2 | Complete |
 | WEB-01 | Phase 4 | Pending |
 | WEB-02 | Phase 4 | Pending |
 | WEB-03 | Phase 4 | Pending |
