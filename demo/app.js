@@ -15,10 +15,7 @@ function switchTab(tabName) {
   // Update tab buttons
   document.querySelectorAll('.tab-btn').forEach(btn => {
     const isActive = btn.dataset.tab === tabName;
-    btn.classList.toggle('text-white', isActive);
-    btn.classList.toggle('border-blue-500', isActive);
-    btn.classList.toggle('text-gray-400', !isActive);
-    btn.classList.toggle('border-transparent', !isActive);
+    btn.classList.toggle('active', isActive);
   });
 
   // Update panels
@@ -138,11 +135,11 @@ async function refreshKeysList() {
   const privateKeys = getKeysByType('private');
 
   publicList.innerHTML = publicKeys.length === 0
-    ? '<p class="text-gray-500 text-sm">No public keys saved</p>'
+    ? '<p class="text-dim text-sm">No public keys saved</p>'
     : '';
 
   privateList.innerHTML = privateKeys.length === 0
-    ? '<p class="text-gray-500 text-sm">No private keys saved</p>'
+    ? '<p class="text-dim text-sm">No private keys saved</p>'
     : '';
 
   for (const key of publicKeys) {
@@ -158,18 +155,18 @@ async function refreshKeysList() {
 
 function createKeyItem(key, fingerprint) {
   const div = document.createElement('div');
-  div.className = 'flex items-center justify-between bg-gray-700 rounded px-3 py-2 mb-2';
+  div.className = 'key-item flex items-center justify-between rounded px-3 py-2 mb-2';
 
   div.innerHTML = `
     <div>
       <span class="font-medium">${escapeHtml(key.name)}</span>
-      <span class="text-gray-400 text-xs ml-2">${fingerprint}</span>
+      <span class="text-muted text-xs ml-2">${fingerprint}</span>
     </div>
     <div class="flex gap-1">
-      <button class="export-btn text-gray-400 hover:text-white text-sm px-2" data-name="${escapeHtml(key.name)}" data-type="${key.type}">
+      <button class="export-btn text-muted hover:text-brand text-sm px-2" data-name="${escapeHtml(key.name)}" data-type="${key.type}">
         Export
       </button>
-      <button class="delete-btn text-red-400 hover:text-red-300 text-sm px-2" data-name="${escapeHtml(key.name)}" data-type="${key.type}">
+      <button class="delete-btn text-error hover:text-red-300 text-sm px-2" data-name="${escapeHtml(key.name)}" data-type="${key.type}">
         Delete
       </button>
     </div>
@@ -394,8 +391,8 @@ function checkUrlFragment() {
 function showError(elementId, message) {
   const el = document.getElementById(elementId);
   el.textContent = message;
-  el.classList.remove('hidden', 'text-green-400');
-  el.classList.add('text-red-400');
+  el.classList.remove('hidden', 'text-success');
+  el.classList.add('text-error');
 }
 
 function hideError(elementId) {
@@ -405,8 +402,8 @@ function hideError(elementId) {
 function showSuccess(elementId, message) {
   const el = document.getElementById(elementId);
   el.textContent = message;
-  el.classList.remove('hidden', 'text-red-400');
-  el.classList.add('text-green-400');
+  el.classList.remove('hidden', 'text-error');
+  el.classList.add('text-success');
 }
 
 function hideSuccess(elementId) {
@@ -469,5 +466,5 @@ async function init() {
 // Start the app
 init().catch(err => {
   console.error('Failed to initialize:', err);
-  document.body.innerHTML = `<div class="p-8 text-red-400">Failed to load: ${err.message}</div>`;
+  document.body.innerHTML = `<div class="p-8 text-error">Failed to load: ${err.message}</div>`;
 });
