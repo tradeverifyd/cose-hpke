@@ -43,7 +43,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **URL-01**: Encrypted COSE message is compressed via CompressionStream
 - [ ] **URL-02**: Compressed data is encoded as base64url
 - [ ] **URL-03**: Encoded data is placed in URL fragment (never sent to server)
-- [ ] **URL-04**: Decryption reverses: fragment → base64url decode → decompress → decrypt
+- [ ] **URL-04**: Decryption reverses: fragment -> base64url decode -> decompress -> decrypt
 
 ## v2 Requirements
 
@@ -78,38 +78,38 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | TBD | Pending |
-| CORE-02 | TBD | Pending |
-| CORE-03 | TBD | Pending |
-| CORE-04 | TBD | Pending |
-| CORE-05 | TBD | Pending |
-| CORE-06 | TBD | Pending |
-| CORE-07 | TBD | Pending |
-| CLI-01 | TBD | Pending |
-| CLI-02 | TBD | Pending |
-| CLI-03 | TBD | Pending |
-| CLI-04 | TBD | Pending |
-| CLI-05 | TBD | Pending |
-| CLI-06 | TBD | Pending |
-| CLI-07 | TBD | Pending |
-| WEB-01 | TBD | Pending |
-| WEB-02 | TBD | Pending |
-| WEB-03 | TBD | Pending |
-| WEB-04 | TBD | Pending |
-| WEB-05 | TBD | Pending |
-| WEB-06 | TBD | Pending |
-| WEB-07 | TBD | Pending |
-| WEB-08 | TBD | Pending |
-| URL-01 | TBD | Pending |
-| URL-02 | TBD | Pending |
-| URL-03 | TBD | Pending |
-| URL-04 | TBD | Pending |
+| CORE-01 | Phase 1 | Pending |
+| CORE-02 | Phase 1 | Pending |
+| CORE-03 | Phase 1 | Pending |
+| CORE-04 | Phase 1 | Pending |
+| CORE-05 | Phase 1 | Pending |
+| CORE-06 | Phase 1 | Pending |
+| CORE-07 | Phase 1 | Pending |
+| CLI-01 | Phase 2 | Pending |
+| CLI-02 | Phase 2 | Pending |
+| CLI-03 | Phase 2 | Pending |
+| CLI-04 | Phase 2 | Pending |
+| CLI-05 | Phase 2 | Pending |
+| CLI-06 | Phase 2 | Pending |
+| CLI-07 | Phase 2 | Pending |
+| WEB-01 | Phase 4 | Pending |
+| WEB-02 | Phase 4 | Pending |
+| WEB-03 | Phase 4 | Pending |
+| WEB-04 | Phase 4 | Pending |
+| WEB-05 | Phase 4 | Pending |
+| WEB-06 | Phase 4 | Pending |
+| WEB-07 | Phase 4 | Pending |
+| WEB-08 | Phase 4 | Pending |
+| URL-01 | Phase 3 | Pending |
+| URL-02 | Phase 3 | Pending |
+| URL-03 | Phase 3 | Pending |
+| URL-04 | Phase 3 | Pending |
 
 **Coverage:**
-- v1 requirements: 25 total
-- Mapped to phases: 0
-- Unmapped: 25 (pending roadmap)
+- v1 requirements: 26 total
+- Mapped to phases: 26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2025-01-19*
-*Last updated: 2025-01-19 after initial definition*
+*Last updated: 2026-01-19 after roadmap creation*
