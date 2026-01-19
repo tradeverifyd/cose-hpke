@@ -57,10 +57,10 @@ Plans:
   2. Compressed data is encoded as base64url (no padding) and placed in URL fragment
   3. URL fragment can be decoded, decompressed, and decrypted to recover original plaintext
   4. Fragment data never appears in URL path (verified by inspecting generated URLs)
-**Plans**: TBD (1 plan)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 03-01: Compression and URL fragment utilities
+- [ ] 03-01-PLAN.md - Compression library module, CLI integration, and URL transport tests
 
 ### Phase 4: Web Demo
 **Goal**: Users can encrypt and decrypt messages entirely in the browser via a GitHub Pages demo
@@ -87,12 +87,13 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-01-19 |
-| 2. CLI | 2/2 | ✓ Complete | 2026-01-19 |
-| 3. URL Transport | 0/1 | Not started | - |
+| 2. CLI | 2/2 | Complete | 2026-01-19 |
+| 3. URL Transport | 0/1 | Planned | - |
 | 4. Web Demo | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-19*
 *Phase 1 planned: 2026-01-19*
 *Phase 2 planned: 2026-01-19*
+*Phase 3 planned: 2026-01-19*
 *Depth: quick (4 phases)*
