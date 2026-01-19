@@ -11,10 +11,14 @@
       "default": "./dist/index.js"
     }
   },
+  "bin": {
+    "cose-hpke": "./src/cli/index.ts"
+  },
   "scripts": {
     "build": "tsc",
     "test": "bun test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cli": "bun run src/cli/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -22,6 +26,7 @@
   },
   "dependencies": {
     "cbor2": "^2.0.1",
+    "citty": "^0.1.6",
     "hpke": "^1.0.3"
   }
 }
