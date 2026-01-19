@@ -5,34 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-01-19)
 
 **Core value:** Enable end-to-end encrypted message sharing through shareable URLs where the encrypted content travels in the fragment and decryption happens entirely client-side.
-**Current focus:** Phase 2 - CLI (In Progress)
+**Current focus:** Phase 2 - CLI (Complete)
 
 ## Current Position
 
 Phase: 2 of 4 (CLI)
-Plan: 1 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-19 - Completed 02-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-01-19 - Completed 02-02-PLAN.md
 
-Progress: [███░░░░░░░] 30%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 4min 45sec
-- Total execution time: 0.24 hours
+- Total plans completed: 4
+- Average duration: 4min 17sec
+- Total execution time: 0.29 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 2 | 8min 34sec | 4min 17sec |
-| 02-cli | 1 | 5min 44sec | 5min 44sec |
+| 02-cli | 2 | 8min 35sec | 4min 18sec |
 
 **Recent Trend:**
-- Last 5 plans: 3min, 5min 34sec, 5min 44sec
-- Trend: stable (CLI setup similar complexity to HPKE encryption)
+- Last 5 plans: 3min, 5min 34sec, 5min 44sec, 2min 51sec
+- Trend: stable, efficient execution
 
 *Updated after each plan completion*
 
@@ -53,6 +53,8 @@ Recent decisions affecting current work:
 - [01-02]: BufferSource casts required for WebCrypto in Bun
 - [02-01]: Shell file redirect pattern for CLI tests (bun test subprocess issues)
 - [02-01]: formatKeyOutput utility for diagnostic + hex CBOR display
+- [02-02]: Base URL placeholder (https://cose-hpke.github.io/decrypt) for shareable URLs
+- [02-02]: base64url encoding without padding for URL fragments
 
 ### Pending Todos
 
@@ -64,6 +66,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-19T18:23:33Z
-Stopped at: Completed 02-01-PLAN.md (CLI Infrastructure + keygen)
+Last session: 2026-01-19T18:27:54Z
+Stopped at: Completed 02-02-PLAN.md (encrypt/decrypt commands)
 Resume file: None
