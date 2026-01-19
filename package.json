@@ -1,0 +1,27 @@
+{
+  "name": "cose-hpke",
+  "version": "0.1.0",
+  "description": "COSE-HPKE implementation for hybrid public key encryption with CBOR serialization",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "cbor2": "^2.0.1",
+    "hpke": "^1.0.3"
+  }
+}
