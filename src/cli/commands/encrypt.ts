@@ -3,7 +3,7 @@
 import { defineCommand } from 'citty';
 import { encrypt } from '../../index.ts';
 import { readKeyFile } from '../util/io.ts';
-import { createShareableUrl } from '../util/url.ts';
+import { createShareableUrl, UrlTooLargeError } from '../util/url.ts';
 
 export default defineCommand({
   meta: {
@@ -52,9 +52,18 @@ export default defineCommand({
       await Bun.write(args.output, ciphertext);
       console.log(`Encrypted message saved to: ${args.output}`);
     } else {
-      // Output shareable URL
-      const url = createShareableUrl(ciphertext);
-      console.log(url);
+      // Output shareable URL (with compression)
+      try {
+        const url = await createShareableUrl(ciphertext);
+        console.log(url);
+      } catch (error) {
+        if (error instanceof UrlTooLargeError) {
+          console.error(`Error: ${error.message}`);
+          console.error('Use --output flag to save to file instead.');
+          process.exit(1);
+        }
+        throw error;
+      }
     }
   },
 });

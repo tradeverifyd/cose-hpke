@@ -31,13 +31,13 @@ export default defineCommand({
     let ciphertext: Uint8Array;
 
     if (isUrl(args.input)) {
-      // Parse URL fragment
-      const parsed = parseShareableUrl(args.input);
-      if (!parsed) {
+      // Parse URL fragment (handles both versioned and legacy formats)
+      try {
+        ciphertext = await parseShareableUrl(args.input);
+      } catch (error) {
         console.error('Error: Invalid URL or missing fragment');
         process.exit(1);
       }
-      ciphertext = parsed;
     } else {
       // Read from file or stdin
       ciphertext = await readInput(args.input);

@@ -77,24 +77,24 @@ describe('URL utilities', () => {
     expect(encoded).not.toContain('=');
   });
 
-  test('createShareableUrl creates valid URL', () => {
+  test('createShareableUrl creates valid URL', async () => {
     const ciphertext = new Uint8Array([1, 2, 3, 4, 5]);
-    const url = createShareableUrl(ciphertext);
+    const url = await createShareableUrl(ciphertext);
     expect(url).toContain('https://');
     expect(url).toContain('#');
   });
 
-  test('parseShareableUrl extracts ciphertext', () => {
+  test('parseShareableUrl extracts ciphertext', async () => {
     const original = new Uint8Array([1, 2, 3, 4, 5]);
-    const url = createShareableUrl(original);
-    const parsed = parseShareableUrl(url);
+    const url = await createShareableUrl(original);
+    const parsed = await parseShareableUrl(url);
     expect(parsed).not.toBeNull();
     expect(Array.from(parsed!)).toEqual(Array.from(original));
   });
 
-  test('parseShareableUrl returns null for invalid URL', () => {
-    expect(parseShareableUrl('not-a-url')).toBeNull();
-    expect(parseShareableUrl('https://example.com')).toBeNull(); // No fragment
+  test('parseShareableUrl throws for invalid URL', async () => {
+    await expect(parseShareableUrl('not-a-url')).rejects.toThrow();
+    await expect(parseShareableUrl('https://example.com')).rejects.toThrow('no fragment'); // No fragment
   });
 });
 
@@ -221,7 +221,7 @@ describe('Encrypt/decrypt round-trip', () => {
     const url = cliOutput.trim();
 
     // Parse URL and decrypt with library
-    const parsed = parseShareableUrl(url);
+    const parsed = await parseShareableUrl(url);
     expect(parsed).not.toBeNull();
     const cliDecrypted = await decrypt(parsed!, privateKey);
     expect(new TextDecoder().decode(cliDecrypted)).toBe(message);
