@@ -90,3 +90,6 @@ export async function decrypt(
 
   throw new InvalidKeyError('Unable to determine COSE message type');
 }
+
+// URL transport
+export * from './url/index.ts';
