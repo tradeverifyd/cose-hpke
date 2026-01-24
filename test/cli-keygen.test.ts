@@ -89,7 +89,7 @@ describe('CLI keygen file output', () => {
     expect(existsSync(privPath)).toBe(true);
   });
 
-  test('public key file starts with CBOR map byte 0xa4', () => {
+  test('public key file starts with CBOR map byte 0xa5', () => {
     const pubPath = '/tmp/test-pub-' + Date.now() + '.cose';
     const privPath = '/tmp/test-priv-' + Date.now() + '.cose';
     tempFiles.push(pubPath, privPath);
@@ -98,11 +98,11 @@ describe('CLI keygen file output', () => {
 
     const file = Bun.file(pubPath);
     const buffer = new Uint8Array(readFileSync(pubPath));
-    // 0xa4 = CBOR map with 4 items (kty, crv, x, y)
-    expect(buffer[0]).toBe(0xa4);
+    // 0xa5 = CBOR map with 5 items (kty, alg, crv, x, y)
+    expect(buffer[0]).toBe(0xa5);
   });
 
-  test('private key file starts with CBOR map byte 0xa5', () => {
+  test('private key file starts with CBOR map byte 0xa6', () => {
     const pubPath = '/tmp/test-pub-' + Date.now() + '.cose';
     const privPath = '/tmp/test-priv-' + Date.now() + '.cose';
     tempFiles.push(pubPath, privPath);
@@ -110,8 +110,8 @@ describe('CLI keygen file output', () => {
     runCli('keygen', `--output-public "${pubPath}"`, `--output-private "${privPath}"`);
 
     const buffer = new Uint8Array(readFileSync(privPath));
-    // 0xa5 = CBOR map with 5 items (kty, crv, x, y, d)
-    expect(buffer[0]).toBe(0xa5);
+    // 0xa6 = CBOR map with 6 items (kty, alg, crv, x, y, d)
+    expect(buffer[0]).toBe(0xa6);
   });
 
   test('public key file can be decoded as valid COSE_Key', () => {
@@ -146,5 +146,52 @@ describe('CLI keygen file output', () => {
     const d = coseKey.get(-4);
     expect(d).toBeInstanceOf(Uint8Array);
     expect((d as Uint8Array).length).toBe(32); // P-256 private key is 32 bytes
+  });
+});
+
+describe('CLI keygen --suite option', () => {
+  test('generates HPKE-7 (P-256) key by default', () => {
+    const { output } = runCli('keygen');
+    // {1: 2, ...} means kty=2 (EC2)
+    expect(output).toContain('{1: 2,');
+    expect(output).toContain('Suite: HPKE-7');
+  });
+
+  test('generates HPKE-7 (P-256) key with --suite HPKE-7', () => {
+    const { output } = runCli('keygen', '--suite HPKE-7');
+    // {1: 2, ...} means kty=2 (EC2)
+    expect(output).toContain('{1: 2,');
+    expect(output).toContain('Suite: HPKE-7');
+  });
+
+  // X25519 (HPKE-4) is not supported in Bun's WebCrypto runtime
+  test.skip('generates HPKE-4 (X25519) key with --suite HPKE-4', () => {
+    const { output } = runCli('keygen', '--suite HPKE-4');
+    // {1: 1, ...} means kty=1 (OKP)
+    expect(output).toContain('{1: 1,');
+    expect(output).toContain('Suite: HPKE-4');
+  });
+
+  // X25519 (HPKE-4) is not supported in Bun's WebCrypto runtime
+  test.skip('generates HPKE-4 key files with --suite HPKE-4', () => {
+    const pubPath = '/tmp/test-pub-' + Date.now() + '.cose';
+    const privPath = '/tmp/test-priv-' + Date.now() + '.cose';
+    tempFiles.push(pubPath, privPath);
+
+    runCli('keygen', '--suite HPKE-4', `--output-public "${pubPath}"`, `--output-private "${privPath}"`);
+
+    const pubBytes = new Uint8Array(readFileSync(pubPath));
+    const coseKey = decodeCoseKey(pubBytes);
+
+    // kty=1 (OKP)
+    expect(coseKey.get(1)).toBe(1);
+    // crv=4 (X25519)
+    expect(coseKey.get(-1)).toBe(4);
+  });
+
+  test('errors on invalid suite', () => {
+    const { output, exitCode } = runCli('keygen', '--suite HPKE-99');
+    expect(exitCode).toBe(1);
+    expect(output).toContain('Invalid suite');
   });
 });
