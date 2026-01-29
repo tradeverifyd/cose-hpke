@@ -280,7 +280,8 @@ async function coseKeyEC2ToCryptoKey(
 }
 
 /**
- * Convert OKP COSE_Key to CryptoKey
+ * Convert OKP COSE_Key to a Key compatible with the hpke library.
+ * Uses the hpke library's deserialization to ensure algorithm.name matches expectations.
  */
 async function coseKeyOKPToCryptoKey(
   coseKey: CoseKeyMap,
@@ -289,32 +290,19 @@ async function coseKeyOKPToCryptoKey(
   const x = coseKey.get(COSE_KEY_X) as Uint8Array;
   const d = coseKey.get(COSE_KEY_D) as Uint8Array | undefined;
 
-  // Build JWK for X25519
-  const jwk: JsonWebKey = {
-    kty: 'OKP',
-    crv: 'X25519',
-    x: base64UrlEncode(x),
-  };
+  // Use hpke library's deserialization to ensure correct algorithm.name
+  const suite = getX25519Suite();
 
   if (type === 'private') {
     if (!d) {
       throw new InvalidKeyError('Private key requires d parameter', 'OKP');
     }
-    jwk.d = base64UrlEncode(d);
+    // X25519 private key is the raw 32-byte scalar
+    return suite.DeserializePrivateKey(d, true) as Promise<CryptoKey>;
   }
 
-  // Import as CryptoKey - X25519 keys for HPKE
-  const keyUsages: KeyUsage[] = type === 'private'
-    ? ['deriveBits', 'deriveKey']
-    : [];
-
-  return crypto.subtle.importKey(
-    'jwk',
-    jwk,
-    { name: 'X25519' },
-    true,
-    keyUsages
-  );
+  // X25519 public key is the raw 32-byte point
+  return suite.DeserializePublicKey(x) as Promise<CryptoKey>;
 }
 
 /**
