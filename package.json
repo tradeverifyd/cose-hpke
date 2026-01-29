@@ -18,7 +18,9 @@
   "scripts": {
     "build": "tsc",
     "build:demo": "bun run scripts/build-demo.ts",
-    "test": "bun test",
+    "test": "bun test && npm run test:hpke4",
+    "test:bun": "bun test",
+    "test:hpke4": "npx tsx --test test/hpke4-x25519.test.node.ts",
     "typecheck": "tsc --noEmit",
     "cli": "bun run src/cli/index.ts"
   },

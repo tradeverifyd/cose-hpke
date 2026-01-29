@@ -135,8 +135,8 @@ describe('encrypt', () => {
     });
   });
 
-  // X25519 (HPKE-4) is not supported in all WebCrypto runtimes (e.g., Bun)
-  // These tests are skipped when X25519 is unavailable
+  // X25519 (HPKE-4) tests are run separately with Node.js: npm run test:hpke4
+  // Bun's WebCrypto doesn't support X25519, so we skip here
   describe.skip('HPKE-4 suite (X25519)', () => {
     it('encrypts and decrypts with HPKE-4 (single recipient)', async () => {
       const { publicKey, privateKey } = await generateKeyPair('HPKE-4');
