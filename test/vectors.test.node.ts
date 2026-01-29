@@ -13,17 +13,30 @@ const EXAMPLES_DIR = join(import.meta.dirname, '..', 'examples');
 describe('Test vectors (HPKE-4 / X25519)', () => {
   let alicePublicKey: Uint8Array;
   let alicePrivateKey: Uint8Array;
+  let ciphertextVector: Uint8Array;
 
   before(() => {
     // Load test vector keys
     const pubPath = join(EXAMPLES_DIR, 'hpke4_alice_pub.cbor');
     const privPath = join(EXAMPLES_DIR, 'hpke4_alice_full.cbor');
+    const ctPath = join(EXAMPLES_DIR, 'ciphertext.cbor');
 
     assert.ok(existsSync(pubPath), 'Public key file should exist');
     assert.ok(existsSync(privPath), 'Private key file should exist');
+    assert.ok(existsSync(ctPath), 'Ciphertext file should exist');
 
     alicePublicKey = new Uint8Array(readFileSync(pubPath));
     alicePrivateKey = new Uint8Array(readFileSync(privPath));
+    ciphertextVector = new Uint8Array(readFileSync(ctPath));
+  });
+
+  describe('Ciphertext vector', () => {
+    it('decrypts provided ciphertext.cbor test vector', async () => {
+      const decrypted = await decrypt(ciphertextVector, alicePrivateKey);
+      const plaintext = new TextDecoder().decode(decrypted);
+
+      assert.strictEqual(plaintext, 'hello orie!\n', 'Should decrypt to expected plaintext');
+    });
   });
 
   describe('Key loading', () => {
