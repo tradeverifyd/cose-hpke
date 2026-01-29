@@ -46,9 +46,16 @@ export function parseCoseEncrypt0(bytes: Uint8Array): CoseEncrypt0 {
     throw new Error('COSE_Encrypt0 must have 3 elements');
   }
 
+  // Ensure we have plain Uint8Array, not Buffer (cbor2 returns Buffer in Node.js)
+  // Buffer is a Uint8Array subclass but cbor2 encodes it differently, so we must convert
+  const toUint8Array = (data: unknown): Uint8Array => {
+    if (data instanceof Uint8Array) return new Uint8Array(data);
+    throw new Error('Expected byte string');
+  };
+
   return {
-    protectedHeader: arr[0] as Uint8Array,
+    protectedHeader: toUint8Array(arr[0]),
     unprotectedHeader: arr[1] as HeaderMap,
-    ciphertext: arr[2] as Uint8Array,
+    ciphertext: toUint8Array(arr[2]),
   };
 }
