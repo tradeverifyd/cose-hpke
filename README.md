@@ -2,6 +2,8 @@
 
 End-to-end encrypted message sharing using HPKE with COSE serialization. Encrypted messages travel in URL fragments and are decrypted entirely client-side.
 
+Based on [draft-ietf-cose-hpke](https://datatracker.ietf.org/doc/draft-ietf-cose-hpke/)
+
 ## Features
 
 - **HPKE-7 Cipher Suite**: P-256 + HKDF-SHA256 + AES-256-GCM
