@@ -22,6 +22,18 @@ export default defineCommand({
       description: 'Private key file',
       required: true,
     },
+    aad: {
+      type: 'string',
+      description: 'External AAD file path or "-" for stdin (COSE Enc_structure AAD)',
+    },
+    info: {
+      type: 'string',
+      description: 'Integrated encryption: external info file path or "-" for stdin',
+    },
+    'recipient-info': {
+      type: 'string',
+      description: 'Key encryption: recipient info file path or "-" for stdin',
+    },
   },
   async run({ args }) {
     // Read private key
@@ -43,8 +55,18 @@ export default defineCommand({
       ciphertext = await readInput(args.input);
     }
 
+    const externalAad = args.aad ? await readInput(args.aad) : undefined;
+    const externalInfo = args.info ? await readInput(args.info) : undefined;
+    const recipientExtraInfo = args['recipient-info']
+      ? await readInput(args['recipient-info'])
+      : undefined;
+
     // Decrypt
-    const plaintext = await decrypt(ciphertext, privateKey);
+    const plaintext = await decrypt(ciphertext, privateKey, {
+      externalAad,
+      externalInfo,
+      recipientExtraInfo,
+    });
 
     // Output plaintext
     console.log(new TextDecoder().decode(plaintext));
