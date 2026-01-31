@@ -2,7 +2,7 @@
 
 import { defineCommand } from 'citty';
 import { encrypt } from '../../index.ts';
-import { readKeyFile } from '../util/io.ts';
+import { readInput, readKeyFile } from '../util/io.ts';
 import { createShareableUrl, UrlTooLargeError } from '../util/url.ts';
 import type { HpkeSuiteId } from '../../types/hpke.ts';
 
@@ -33,6 +33,18 @@ export default defineCommand({
       alias: 's',
       description: 'HPKE suite: HPKE-4 (X25519) or HPKE-7 (P-256, default)',
     },
+    aad: {
+      type: 'string',
+      description: 'External AAD file path or "-" for stdin (COSE Enc_structure AAD)',
+    },
+    info: {
+      type: 'string',
+      description: 'Integrated encryption: external info file path or "-" for stdin',
+    },
+    'recipient-info': {
+      type: 'string',
+      description: 'Key encryption: recipient info file path or "-" for stdin (2+ recipients)',
+    },
   },
   async run({ args }) {
     // Validate suite argument
@@ -54,11 +66,32 @@ export default defineCommand({
       recipientKeys.push(key);
     }
 
+    if (args.info && recipientKeys.length !== 1) {
+      console.error('Error: --info is only valid for integrated encryption (1 recipient)');
+      process.exit(1);
+    }
+
+    if (args['recipient-info'] && recipientKeys.length < 2) {
+      console.error('Error: --recipient-info is only valid for key encryption (2+ recipients)');
+      process.exit(1);
+    }
+
+    const externalAad = args.aad ? await readInput(args.aad) : undefined;
+    const externalInfo = args.info ? await readInput(args.info) : undefined;
+    const recipientExtraInfo = args['recipient-info']
+      ? await readInput(args['recipient-info'])
+      : undefined;
+
     // Encode message as bytes
     const plaintext = new TextEncoder().encode(args.message);
 
     // Encrypt with optional suite
-    const ciphertext = await encrypt(plaintext, recipientKeys, { suiteId });
+    const ciphertext = await encrypt(plaintext, recipientKeys, {
+      suiteId,
+      externalAad,
+      externalInfo,
+      recipientExtraInfo,
+    });
 
     if (args.output) {
       // Write to file
