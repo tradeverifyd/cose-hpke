@@ -1,3 +1,4 @@
+import { senderPsk, receiverPsk, type PskOptions } from './psk.ts';
 // Integrated encryption mode using COSE_Encrypt0 (single recipient)
 import { getHpkeSuite, getSuiteConfig, getSuiteFromAlg } from './suite.ts';
 import { buildProtectedHeader, buildUnprotectedHeader, parseProtectedHeader } from '../cose/headers.ts';
@@ -10,7 +11,7 @@ import { DecryptionError } from '../errors.ts';
 /**
  * Options for integrated encryption operations
  */
-export interface IntegratedEncryptOptions {
+export interface IntegratedEncryptOptions extends PskOptions {
   suiteId?: HpkeSuiteId;
   externalAad?: Uint8Array;
   externalInfo?: Uint8Array;
@@ -29,6 +30,7 @@ export async function encryptIntegrated(
   recipientPublicKey: Uint8Array,
   options: IntegratedEncryptOptions = {}
 ): Promise<Uint8Array> {
+  const psk = senderPsk(options);
   const config = getSuiteConfig(options.suiteId);
   const suite = getHpkeSuite(options.suiteId);
 
@@ -37,7 +39,7 @@ export async function encryptIntegrated(
   const recipientCryptoKey = await coseKeyToCryptoKey(recipientCoseKey, 'public');
 
   // Build protected header
-  const protectedHeader = buildProtectedHeader(config.integratedAlg);
+  const protectedHeader = buildProtectedHeader(config.integratedAlg, psk.pskId);
 
   // Build AAD (Enc_structure) with external AAD if provided
   const aad = buildEncStructure('Encrypt0', protectedHeader, options.externalAad);
@@ -51,7 +53,7 @@ export async function encryptIntegrated(
   const { encapsulatedSecret, ciphertext } = await suite.Seal(
     recipientCryptoKey,
     plaintext,
-    sealOptions
+    { ...sealOptions, ...psk }
   );
 
   // Build unprotected header with encapsulated key
@@ -92,7 +94,11 @@ export async function decryptIntegrated(
   const alg = protectedHeaderMap.get(HEADER_ALG) as number;
 
   // Determine suite from algorithm or use provided suite
-  const suiteId = options.suiteId ?? getSuiteFromAlg(alg) ?? undefined;
+  const suiteId = getSuiteFromAlg(alg);
+  if (!suiteId || getSuiteConfig(suiteId).integratedAlg !== alg || (options.suiteId && options.suiteId !== suiteId)) {
+    throw new DecryptionError("Unsupported or mismatched Integrated algorithm");
+  }
+  const psk = receiverPsk(protectedHeaderMap, encrypt0.unprotectedHeader, options);
   const suite = getHpkeSuite(suiteId);
 
   // Decode private key
@@ -113,7 +119,7 @@ export async function decryptIntegrated(
       privateCryptoKey,
       ek,
       encrypt0.ciphertext,
-      openOptions
+      { ...openOptions, ...psk }
     );
     return new Uint8Array(plaintext);
   } catch (error) {

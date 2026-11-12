@@ -1,10 +1,10 @@
-// Recipient_structure for HPKE info per draft-ietf-cose-hpke-20
+// Recipient_structure for HPKE info per draft-ietf-cose-hpke-27
 import { encode } from '../util/cbor.ts';
 
 /**
  * Build the Recipient_structure for HPKE info parameter.
  *
- * Per draft-20, the Recipient_structure for HPKE info is:
+ * Per draft-27, the Recipient_structure for HPKE info is:
  *   Recipient_structure = [
  *     context : "HPKE Recipient",
  *     next_layer_alg : int / tstr,
@@ -27,5 +27,5 @@ export function buildRecipientStructure(
     nextLayerAlg,
     recipientProtectedHeader,
     extraInfo,
-  ]);
+  ], { cde: true });
 }
