@@ -1,3 +1,4 @@
+import type { PskOptions } from './hpke/psk.ts';
 // COSE-HPKE library entry point
 
 // Types
@@ -41,7 +42,8 @@ import type { HpkeSuiteId } from './types/hpke.ts';
 /**
  * Options for encryption operations
  */
-export interface EncryptOptions {
+export interface EncryptOptions extends PskOptions {
+  hpkeAad?: Uint8Array;
   suiteId?: HpkeSuiteId;
   externalAad?: Uint8Array;
   externalInfo?: Uint8Array;        // For integrated encryption
@@ -51,7 +53,8 @@ export interface EncryptOptions {
 /**
  * Options for decryption operations
  */
-export interface DecryptOptions {
+export interface DecryptOptions extends PskOptions {
+  hpkeAad?: Uint8Array;
   suiteId?: HpkeSuiteId;
   externalAad?: Uint8Array;
   externalInfo?: Uint8Array;        // For integrated encryption
@@ -79,19 +82,11 @@ export async function encrypt(
   }
 
   if (recipients.length === 1) {
-    const integratedOptions: IntegratedEncryptOptions = {
-      suiteId: options.suiteId,
-      externalAad: options.externalAad,
-      externalInfo: options.externalInfo,
-    };
+    const integratedOptions: IntegratedEncryptOptions = options;
     return encryptIntegrated(plaintext, recipients[0]!, integratedOptions);
   }
 
-  const keyEncryptionOptions: KeyEncryptionOptions = {
-    suiteId: options.suiteId,
-    externalAad: options.externalAad,
-    recipientExtraInfo: options.recipientExtraInfo,
-  };
+  const keyEncryptionOptions: KeyEncryptionOptions = options;
   return encryptKeyEncryption(plaintext, recipients, keyEncryptionOptions);
 }
 
@@ -115,19 +110,11 @@ export async function decrypt(
 
   if (decoded instanceof Tag) {
     if (decoded.tag === COSE_ENCRYPT0_TAG) {
-      const integratedOptions: IntegratedEncryptOptions = {
-        suiteId: options.suiteId,
-        externalAad: options.externalAad,
-        externalInfo: options.externalInfo,
-      };
+      const integratedOptions: IntegratedEncryptOptions = options;
       return decryptIntegrated(coseMessage, privateKey, integratedOptions);
     }
     if (decoded.tag === COSE_ENCRYPT_TAG) {
-      const keyEncryptionOptions: KeyEncryptionOptions = {
-        suiteId: options.suiteId,
-        externalAad: options.externalAad,
-        recipientExtraInfo: options.recipientExtraInfo,
-      };
+      const keyEncryptionOptions: KeyEncryptionOptions = options;
       return decryptKeyEncryption(coseMessage, privateKey, keyEncryptionOptions);
     }
     throw new InvalidKeyError(`Unknown COSE tag: ${decoded.tag}`);
@@ -136,19 +123,11 @@ export async function decrypt(
   // Untagged - try to detect by array length
   if (Array.isArray(decoded)) {
     if (decoded.length === 3) {
-      const integratedOptions: IntegratedEncryptOptions = {
-        suiteId: options.suiteId,
-        externalAad: options.externalAad,
-        externalInfo: options.externalInfo,
-      };
+      const integratedOptions: IntegratedEncryptOptions = options;
       return decryptIntegrated(coseMessage, privateKey, integratedOptions);
     }
     if (decoded.length === 4) {
-      const keyEncryptionOptions: KeyEncryptionOptions = {
-        suiteId: options.suiteId,
-        externalAad: options.externalAad,
-        recipientExtraInfo: options.recipientExtraInfo,
-      };
+      const keyEncryptionOptions: KeyEncryptionOptions = options;
       return decryptKeyEncryption(coseMessage, privateKey, keyEncryptionOptions);
     }
   }

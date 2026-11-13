@@ -8,9 +8,10 @@ export type HeaderMap = Map<number, unknown>;
  * Build a protected header with algorithm identifier.
  * Returns CBOR-encoded header map.
  */
-export function buildProtectedHeader(alg: number): Uint8Array {
-  const header = new Map<number, number>();
+export function buildProtectedHeader(alg: number, pskId?: Uint8Array): Uint8Array {
+  const header = new Map<number, unknown>();
   header.set(HEADER_ALG, alg);
+  if (pskId) header.set(-5, pskId);
   return encode(header);
 }
 

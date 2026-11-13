@@ -1,4 +1,4 @@
-// HPKE algorithm identifiers per draft-ietf-cose-hpke-20
+// HPKE algorithm identifiers per draft-ietf-cose-hpke-27
 
 // HPKE-7 Algorithm IDs (P-256 + HKDF-SHA256 + AES-256-GCM)
 export const ALG_HPKE_7_INTEGRATED = 45;    // HPKE-7 integrated encryption

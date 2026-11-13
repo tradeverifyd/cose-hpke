@@ -1,3 +1,5 @@
+import { AEAD_ChaCha20Poly1305 } from "hpke";
+import { senderPsk, receiverPsk, type PskOptions } from './psk.ts';
 // Key encryption mode using COSE_Encrypt (multi-recipient)
 import { getHpkeSuite, getSuiteConfig, getSuiteFromAlg } from './suite.ts';
 import { buildProtectedHeader, buildUnprotectedHeader, parseProtectedHeader } from '../cose/headers.ts';
@@ -17,7 +19,8 @@ const HEADER_IV = 5;    // IV parameter label
 /**
  * Options for key encryption operations
  */
-export interface KeyEncryptionOptions {
+export interface KeyEncryptionOptions extends PskOptions {
+  hpkeAad?: Uint8Array;
   suiteId?: HpkeSuiteId;
   externalAad?: Uint8Array;
   recipientExtraInfo?: Uint8Array;
@@ -40,6 +43,7 @@ export async function encryptKeyEncryption(
     throw new InvalidKeyError('At least one recipient required');
   }
 
+  const psk = senderPsk(options);
   const config = getSuiteConfig(options.suiteId);
   const suite = getHpkeSuite(options.suiteId);
 
@@ -88,20 +92,20 @@ export async function encryptKeyEncryption(
     const cryptoKey = await coseKeyToCryptoKey(coseKey, 'public');
 
     // Recipient protected header
-    const recipientProtectedHeader = buildProtectedHeader(config.keyEncryptionAlg);
+    const recipientProtectedHeader = buildProtectedHeader(config.keyEncryptionAlg, psk.pskId);
 
-    // Build Recipient_structure for HPKE info per draft-20
+    // Build Recipient_structure for HPKE info per draft-27
     const hpkeInfo = buildRecipientStructure(
       config.contentAlg,
       recipientProtectedHeader,
       recipientExtraInfo
     );
 
-    // HPKE seal the CEK with info parameter (AAD is empty per draft-20)
+    // HPKE seal the CEK with info parameter (AAD is empty per draft-27)
     const { encapsulatedSecret, ciphertext: encryptedCek } = await suite.Seal(
       cryptoKey,
       cek,
-      { info: hpkeInfo, aad: new Uint8Array() }
+      { info: hpkeInfo, aad: options.hpkeAad, ...psk }
     );
 
     // Recipient unprotected header with encapsulated key
@@ -142,6 +146,8 @@ export async function decryptKeyEncryption(
   const contentHeader = parseProtectedHeader(coseEncrypt.protectedHeader);
   const contentAlg = contentHeader.get(HEADER_ALG) as number | undefined;
 
+  if (contentAlg !== 1 && contentAlg !== 2 && contentAlg !== 3 && contentAlg !== 24) throw new DecryptionError("Unsupported content algorithm");
+
   // Decode private key
   const privateCoseKey = decodeCoseKey(recipientPrivateKey);
   const privateCryptoKey = await coseKeyToCryptoKey(privateCoseKey, 'private');
@@ -160,13 +166,14 @@ export async function decryptKeyEncryption(
       const recipientAlg = recipientHeader.get(HEADER_ALG) as number;
 
       // Determine suite from algorithm
-      const suiteId = options.suiteId ?? getSuiteFromAlg(recipientAlg);
-      if (!suiteId) continue;
+      const suiteId = getSuiteFromAlg(recipientAlg);
+      if (!suiteId || getSuiteConfig(suiteId).keyEncryptionAlg !== recipientAlg || (options.suiteId && options.suiteId !== suiteId)) continue;
+      const psk = receiverPsk(recipientHeader, recipient.unprotectedHeader, options);
 
       const suite = getHpkeSuite(suiteId);
       const config = getSuiteConfig(suiteId);
 
-      // Build Recipient_structure for HPKE info per draft-20
+      // Build Recipient_structure for HPKE info per draft-27
       const nextLayerAlg = contentAlg ?? config.contentAlg;
       const hpkeInfo = buildRecipientStructure(
         nextLayerAlg,
@@ -174,12 +181,12 @@ export async function decryptKeyEncryption(
         recipientExtraInfo
       );
 
-      // HPKE open to get CEK (AAD is empty per draft-20)
+      // HPKE open to get CEK (AAD is empty per draft-27)
       const decryptedCek = await suite.Open(
         privateCryptoKey,
         ek,
         recipient.ciphertext,
-        { info: hpkeInfo, aad: new Uint8Array() }
+        { info: hpkeInfo, aad: options.hpkeAad, ...psk }
       );
       cek = new Uint8Array(decryptedCek);
       break;
@@ -195,10 +202,15 @@ export async function decryptKeyEncryption(
 
   // Decrypt content with CEK
   const iv = coseEncrypt.unprotectedHeader.get(HEADER_IV) as Uint8Array;
-  if (!iv) {
-    throw new DecryptionError('Missing IV in content unprotected header');
+  if (!(iv instanceof Uint8Array) || iv.length !== IV_LENGTH) {
+    throw new DecryptionError('COSE AES-GCM IV must be 12 bytes');
   }
 
+  const expectedKeyLength = contentAlg === 1 ? 16 : contentAlg === 2 ? 24 : 32;
+  if (cek.length !== expectedKeyLength) throw new DecryptionError('Invalid CEK length');
+  if (contentAlg === 24) {
+    return AEAD_ChaCha20Poly1305().Open(cek, iv, buildEncStructure('Encrypt', coseEncrypt.protectedHeader, options.externalAad), coseEncrypt.ciphertext);
+  }
   const contentKey = await crypto.subtle.importKey(
     'raw',
     cek as BufferSource,

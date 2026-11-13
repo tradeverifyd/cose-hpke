@@ -2,7 +2,7 @@
 
 End-to-end encrypted message sharing using HPKE with COSE serialization. Encrypted messages travel in URL fragments and are decrypted entirely client-side.
 
-Based on [draft-ietf-cose-hpke](https://datatracker.ietf.org/doc/draft-ietf-cose-hpke/)
+Based on [draft-ietf-cose-hpke-27](https://datatracker.ietf.org/doc/draft-ietf-cose-hpke/)
 
 ## Features
 
@@ -158,7 +158,7 @@ The fragment is never sent to the server, ensuring end-to-end encryption.
 | KEM | DHKEM(P-256, HKDF-SHA256) |
 | KDF | HKDF-SHA256 |
 | AEAD | AES-256-GCM |
-| COSE Algorithm ID | -1 (HPKE-7) |
+| COSE Algorithm IDs | 45 (HPKE-7), 53 (HPKE-7-KE) |
 
 ### Message Formats
 
@@ -190,3 +190,25 @@ bun run build:demo
 ## License
 
 MIT
+
+## Draft-27 and PR #155 interoperability
+
+Supports HPKE-4 and HPKE-7, with base and PSK authentication in both modes.
+Supply `psk` (at least 32 bytes) and a nonempty `pskId` on encryption.
+Decryption requires the external `psk` and reads the protected `psk_id` (-5);
+an optional supplied `pskId` must match. Unprotected `psk_id` is rejected.
+`hpkeAad` optionally supplies CEK wrap/unwrap AAD (empty by default).
+The existing `externalInfo`, `recipientExtraInfo`, and `externalAad` options
+bind integrated info, recipient context, and layer-0 AAD respectively.
+
+Encryption uses A256GCM for content. Decryption supports A128GCM, A192GCM,
+A256GCM, and ChaCha20/Poly1305. Nonces must be 12 bytes; invalid IV lengths,
+unknown or wrong-mode HPKE algorithms, and suite overrides that disagree
+with the message are rejected. Draft algorithm/header labels are assumed.
+
+`npm test` includes 48 independent upstream vectors covering both supported
+suites, both modes, PSK, and external inputs, pinned to
+[PR #155](https://github.com/cose-wg/draft-ietf-cose-hpke/pull/155) commit
+`8cef948f1d8173ec4a21da61ba40a449fa1bcfb7`. The PR corrects AES-GCM IV lengths;
+this implementation already generated 12-byte IVs and now rejects invalid
+lengths on input. Other HPKE suites are not implemented.
